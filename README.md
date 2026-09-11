@@ -1,14 +1,17 @@
 # Multi-Agent Patterns on AWS Serverless
 
+<img src="docs/images/badge-building-agentic-ai-aws-serverless.png" width="150" align="right" alt="Proficient badge — Building Agentic AI with AWS Serverless">
+
 Hands-on notes and architecture write-up from building an event-driven, multi-agent travel-booking
 system on AWS — comparing **choreography** (EventBridge) and **orchestration** (Step Functions) as
 coordination strategies for asynchronous AI agents, with human-in-the-loop approval and
 distributed observability layered on top.
 
-![Proficient badge — Building Agentic AI with AWS Serverless](docs/images/badge-building-agentic-ai-aws-serverless.png)
 ![AWS Serverless](https://img.shields.io/badge/AWS-Serverless-FF9900?logo=amazonaws&logoColor=white)
 ![Status: Reference Architecture](https://img.shields.io/badge/Status-Reference%20Architecture-informational)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+
+<br clear="right">
 
 ## Contents
 
