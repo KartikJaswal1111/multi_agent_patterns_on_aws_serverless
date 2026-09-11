@@ -1,7 +1,7 @@
 # Choreography Architecture
 
 Agents coordinate purely through events on a shared EventBridge bus. No component owns the
-sequence, and — just as importantly — **no agent ever talks to another agent directly.** Every
+sequence, and - just as importantly - **no agent ever talks to another agent directly.** Every
 connection in this system is an agent to the bus. That single constraint is what the diagram below
 is drawn to make obvious.
 
@@ -10,12 +10,12 @@ flowchart TB
     Client(["Traveler\nsubmits a request"])
     Bus{{"Amazon EventBridge\nCustom Event Bus"}}
 
-    subgraph Agents["Independent Agents — each its own AWS Lambda function"]
+    subgraph Agents["Independent Agents - each its own AWS Lambda function"]
         direction LR
         Planner["Planner Agent"]
         Weather["Weather Agent"]
         Flight["Flight-Search Agent"]
-        Hotel["Hotel Agent\n(added post-launch — Module 04)"]
+        Hotel["Hotel Agent\n(added post-launch - Module 04)"]
     end
 
     Reviewer(["Human Reviewer\nhigh-risk bookings only"])
@@ -46,7 +46,7 @@ booking workflow itself.
 
 ## Event catalog
 
-The diagram intentionally shows *only* the hub-and-spoke topology — every event actually flowing
+The diagram intentionally shows *only* the hub-and-spoke topology - every event actually flowing
 across that bus is documented here instead, which is the same separation of concerns a real
 event-driven-architecture design doc uses (topology diagram + event contract table, rather than
 trying to cram both into one picture):
@@ -60,10 +60,10 @@ trying to cram both into one picture):
 | `HumanReviewRequired` | Planner Agent | Human Reviewer (via review queue) | Escalates a high-risk or over-budget booking |
 | `HumanApprovalDecision` | Human Reviewer | Planner Agent | Carries the approve/reject outcome back in |
 | `FinalBookingCompleted` | Planner Agent | Hotel Agent *(Module 04)* | Triggers the hotel-recommendation agent, added after launch |
-| `HotelRecommendationsReady` | Hotel Agent *(Module 04)* | — *(terminal event; not currently consumed by another agent)* | Published once the hotel agent finishes and emails its recommendations |
+| `HotelRecommendationsReady` | Hotel Agent *(Module 04)* | - *(terminal event; not currently consumed by another agent)* | Published once the hotel agent finishes and emails its recommendations |
 
 **Correlation, not coordination.** The only thing every agent shares on the bus is the `bookingID`
-carried on every event above, and there's no central agent registry — the Hotel Agent (Module 04)
+carried on every event above, and there's no central agent registry - the Hotel Agent (Module 04)
 is the one confirmed exception to "no shared state," since it and the Planner Agent both read from
 the same S3 session store. See
 [`../docs/01-choreography-pattern.md`](../docs/01-choreography-pattern.md) for the walkthrough and

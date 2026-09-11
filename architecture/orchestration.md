@@ -1,7 +1,7 @@
 # Orchestration Architecture
 
 A single Step Functions state machine owns the sequence. Agents still run as independent Lambda
-functions, but the workflow definition — not the agents themselves — controls order, parallelism,
+functions, but the workflow definition - not the agents themselves - controls order, parallelism,
 and branching.
 
 ```mermaid
