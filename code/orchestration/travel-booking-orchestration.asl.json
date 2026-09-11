@@ -1,0 +1,145 @@
+{
+  "Comment": "Multi-Agent Travel Booking Orchestration - Pure Task Token Pattern (No SQS)",
+  "StartAt": "PlannerExtract",
+  "States": {
+    "PlannerExtract": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${OrchPlannerFunctionArn}",
+        "Payload.$": "$"
+      },
+      "ResultPath": "$.plannerExtract",
+      "Next": "ParallelWeatherAndFlight",
+      "Catch": [
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "HandleError" }
+      ]
+    },
+    "ParallelWeatherAndFlight": {
+      "Type": "Parallel",
+      "ResultPath": "$.parallelResults",
+      "Next": "PlannerAnalyzeAndBook",
+      "Branches": [
+        {
+          "StartAt": "WeatherGet",
+          "States": {
+            "WeatherGet": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "${OrchWeatherFunctionArn}",
+                "Payload.$": "$"
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "FlightSearch",
+          "States": {
+            "FlightSearch": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "${OrchFlightFunctionArn}",
+                "Payload.$": "$"
+              },
+              "End": true
+            }
+          }
+        }
+      ],
+      "Catch": [
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "HandleError" }
+      ]
+    },
+    "PlannerAnalyzeAndBook": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${OrchPlannerFunctionArn}",
+        "Payload.$": "$"
+      },
+      "ResultPath": "$.plannerResult",
+      "Next": "CheckPlannerDecision",
+      "Catch": [
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "HandleError" }
+      ]
+    },
+    "CheckPlannerDecision": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.plannerResult.decision",
+          "StringEquals": "needs_review",
+          "Next": "WaitForHuman"
+        },
+        {
+          "Variable": "$.plannerResult.decision",
+          "StringEquals": "book",
+          "Next": "PlannerFinalizeBooking"
+        }
+      ],
+      "Default": "HandleError"
+    },
+    "WaitForHuman": {
+      "Comment": "Classic Step Functions Activity — a reviewer/worker polls GetActivityTask and calls SendTaskSuccess/SendTaskFailure with the task token. This is the 'Pure Task Token Pattern (No SQS)' referenced in the top-level Comment.",
+      "Type": "Task",
+      "Resource": "${HumanReviewActivityArn}",
+      "TimeoutSeconds": 3600,
+      "ResultPath": "$.humanDecision",
+      "Next": "ProcessHumanDecision",
+      "Catch": [
+        { "ErrorEquals": ["States.Timeout"], "Next": "HumanReviewTimeout" },
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "HandleError" }
+      ]
+    },
+    "ProcessHumanDecision": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.humanDecision.decision",
+          "StringEquals": "approved",
+          "Next": "PlannerFinalizeBooking"
+        },
+        {
+          "Variable": "$.humanDecision.decision",
+          "StringEquals": "rejected",
+          "Next": "BookingRejected"
+        }
+      ],
+      "Default": "HandleError"
+    },
+    "PlannerFinalizeBooking": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${OrchPlannerFunctionArn}",
+        "Payload.$": "$"
+      },
+      "ResultPath": "$.finalBookingResult",
+      "Next": "BookingSuccess",
+      "Catch": [
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "HandleError" }
+      ]
+    },
+    "BookingRejected": {
+      "Type": "Pass",
+      "Result": { "status": "rejected", "message": "Booking rejected by human reviewer" },
+      "End": true
+    },
+    "HumanReviewTimeout": {
+      "Type": "Pass",
+      "Result": { "status": "timeout", "message": "Human review timed out before a decision was recorded" },
+      "End": true
+    },
+    "HandleError": {
+      "Type": "Pass",
+      "Result": { "status": "failed", "message": "Workflow failed - see $.error for details" },
+      "End": true
+    },
+    "BookingSuccess": {
+      "Type": "Succeed"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "_reconstruction_note": "See ../README.md — within_budget/flights_available field names are taken from the step-output log visible in docs/images/10-step-functions-execution-graph-completed.png; other values are illustrative. Remove this key before using as real state machine input.",
+  "bookingID": "high-risk-test-1788030134",
+  "origin": "LAX",
+  "destination": "Miami",
+  "startDate": "2026-03-20",
+  "endDate": "2026-03-23",
+  "travelers": 1,
+  "budget": 1000,
+  "riskFlags": {
+    "within_budget": false,
+    "flights_available": false
+  }
+}

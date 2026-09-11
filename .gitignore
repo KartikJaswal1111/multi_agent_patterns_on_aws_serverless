@@ -1,0 +1,15 @@
+# Build artifacts from code/agents/hotel-agent/deploy-and-test.sh
+build/
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

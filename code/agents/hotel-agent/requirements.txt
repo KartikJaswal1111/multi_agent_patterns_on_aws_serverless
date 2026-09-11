@@ -1,0 +1,7 @@
+# Added to make deploy-and-test.sh actually work with the real lambda_function.py.
+# Not evidenced from a screenshot — the workshop's own dependency-packaging step (a
+# requirements.txt, a pre-built Lambda layer, or something else) was never visible on
+# screen. `strands-agents` is the real PyPI package for `from strands import Agent, tool`;
+# pin an exact version if you have one from the workshop environment. boto3 is deliberately
+# not listed here — it already ships in the standard Lambda Python runtime.
+strands-agents
