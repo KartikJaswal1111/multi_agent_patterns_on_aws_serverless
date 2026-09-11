@@ -257,7 +257,12 @@ here deliberately rather than left implicit — see [section 10](#10-risks-and-m
 | Central state machine as a single point of workflow-definition change (orchestration) | Every new step requires editing and redeploying the state machine | Modularize with nested state machines / `Map` states as the workflow grows |
 | Single-region deployment | A regional AWS outage takes the whole system down | Out of scope for this reference build; would require multi-region replication of the bus, state machine, and Lambda functions |
 
-## 11. Future roadmap
+## 11. Where this could go next
+
+This isn't a committed project plan — this repository is a completed reference build, not an
+active one. It's the architectural thinking on what closing the gaps in [section 10](#10-risks-and-mitigations)
+would actually involve, laid out the way an HLD would frame it for a team deciding whether to take
+this from reference architecture to production.
 
 - Add a schema registry / versioning strategy for events crossing the EventBridge bus.
 - Add DLQs, retries, and alerting to every integration point identified in section 10.
