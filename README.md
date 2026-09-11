@@ -33,7 +33,7 @@ distributed observability layered on top.
 | Evaluate the architecture decision | [`architecture/HLD.md`](architecture/HLD.md) — requirements, decision matrix, recommendation |
 | See the technical depth, module by module | [`docs/`](docs/) — five walkthroughs, each with real screenshots |
 | Check which AWS service does what | [`aws-services/`](aws-services/) — official icons mapped to their role |
-| Look at actual code | [`code/`](code/) — read [`code/README.md`](code/README.md) first; it's reconstructed, not the verbatim workshop source |
+| Look at actual code | [`code/`](code/) — read [`code/README.md`](code/README.md) first; most of it is reconstructed, except the hotel-agent Lambda, which is the actual verbatim source |
 
 ## The problem
 
@@ -100,8 +100,9 @@ what's evidenced, verbatim, or illustrative in each file.
 
 ## What I'd change for a production system
 
-- Add dead-letter queues and explicit retry/backoff policies on every EventBridge target, not just
-  the ones that happened to need it during the workshop.
+- Make every agent handler idempotent against `bookingID`. EventBridge and Step Functions both
+  guarantee at-least-once delivery, so a retried event or task should never double-book or
+  double-charge a traveler — nothing here currently protects against that.
 - Version the event schemas (`TravelRequestSubmitted`, `FlightSearchCompleted`, etc.) so agents can
   evolve independently without breaking consumers — choreography's loose coupling only holds if the
   event contracts are stable.
