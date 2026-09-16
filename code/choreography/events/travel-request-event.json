@@ -1,5 +1,5 @@
 {
-  "_reconstruction_note": "See ../../README.md — bookingID, origin, destination, and dates below are taken directly from docs/images/03-travel-request-event-published.png; travelers/preferences are illustrative. Remove this key before using with `aws events put-events`.",
+  "_reconstruction_note": "See ../../README.md - bookingID, origin, destination, and dates below are taken directly from docs/images/03-travel-request-event-published.png; travelers/preferences are illustrative. Remove this key before using with `aws events put-events`.",
   "Source": "workshop.travel-request",
   "DetailType": "TravelRequestSubmitted",
   "Detail": {

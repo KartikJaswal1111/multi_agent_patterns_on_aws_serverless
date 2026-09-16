@@ -83,7 +83,7 @@
       "Default": "HandleError"
     },
     "WaitForHuman": {
-      "Comment": "Classic Step Functions Activity — a reviewer/worker polls GetActivityTask and calls SendTaskSuccess/SendTaskFailure with the task token. This is the 'Pure Task Token Pattern (No SQS)' referenced in the top-level Comment.",
+      "Comment": "Classic Step Functions Activity - a reviewer/worker polls GetActivityTask and calls SendTaskSuccess/SendTaskFailure with the task token. This is the 'Pure Task Token Pattern (No SQS)' referenced in the top-level Comment.",
       "Type": "Task",
       "Resource": "${HumanReviewActivityArn}",
       "TimeoutSeconds": 3600,

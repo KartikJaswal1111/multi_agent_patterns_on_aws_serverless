@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# RECONSTRUCTED from docs/images/02-eventbridge-bus-lookup.png — see ../README.md for provenance.
+# RECONSTRUCTED from docs/images/02-eventbridge-bus-lookup.png - see ../README.md for provenance.
 #
 # Resolves the workshop stack's region, account, event bus, and per-agent Lambda ARNs
 # into shell variables that the other scripts in this folder assume are already exported.

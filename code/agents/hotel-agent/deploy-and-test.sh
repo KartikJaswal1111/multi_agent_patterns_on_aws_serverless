@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # RECONSTRUCTED from docs/images/11-hotel-agent-lambda-code-deployed.png and
-# docs/images/12-hotel-agent-invocation-result.png — see ../../README.md.
+# docs/images/12-hotel-agent-invocation-result.png - see ../../README.md.
 #
 # The function name, runtime, logging config, and the final `aws lambda invoke` call
 # (including its exact payload and flags) are close to a literal transcript. The --role
-# ARN pattern is inferred — the create-function command scrolled past on screen, only its
+# ARN pattern is inferred - the create-function command scrolled past on screen, only its
 # tail (LoggingConfig) and success message were visible.
 #
-# The packaging step below (pip install + zip) is NOT from a screenshot — it's added
+# The packaging step below (pip install + zip) is NOT from a screenshot - it's added
 # because lambda_function.py imports `strands`, a third-party package not present in the
 # default Lambda runtime. A bare `zip -r hotel-agent.zip lambda_function.py` deploys
 # successfully but fails at invoke time with ModuleNotFoundError: No module named 'strands'.
 # The workshop may have used a pre-built Lambda layer instead of bundling dependencies this
-# way — there's no screenshot evidence either way — but this is the correct, self-contained
+# way - there's no screenshot evidence either way - but this is the correct, self-contained
 # way to make the real code actually runnable.
 set -euo pipefail
 
@@ -46,7 +46,7 @@ aws events put-targets \
   --targets "Id"="hotel-agent","Arn"="arn:aws:lambda:${AWS_REGION}:${AWS_ACCOUNT_ID}:function:${STACK_NAME}-hotel-agent" \
   --region "$AWS_REGION"
 
-# Direct invocation test — this exact call and payload are what docs/images/12 shows
+# Direct invocation test - this exact call and payload are what docs/images/12 shows
 aws lambda invoke \
   --function-name "${STACK_NAME}-hotel-agent" \
   --payload '{"detail":{"booking_id":"hotel-test-001","destination":"Miami","budget":1000}}' \

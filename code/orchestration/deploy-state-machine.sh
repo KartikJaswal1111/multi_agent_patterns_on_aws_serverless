@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # RECONSTRUCTED from docs/images/07-orchestration-state-machine-definition.png,
 # docs/images/08-step-functions-state-machine-created.png, and
-# docs/images/09-step-functions-execution-graph-running.png — see ../README.md.
+# docs/images/09-step-functions-execution-graph-running.png - see ../README.md.
 #
 # The `sed` substitution block and its final echo below are close to a literal transcript.
-# The create-state-machine / start-execution calls are inferred — they weren't directly
+# The create-state-machine / start-execution calls are inferred - they weren't directly
 # visible on screen, only their result (the deployed state machine and a running execution).
 set -euo pipefail
 

@@ -1,5 +1,5 @@
 {
-  "_reconstruction_note": "See ../README.md — within_budget/flights_available field names are taken from the step-output log visible in docs/images/10-step-functions-execution-graph-completed.png; other values are illustrative. Remove this key before using as real state machine input.",
+  "_reconstruction_note": "See ../README.md - within_budget/flights_available field names are taken from the step-output log visible in docs/images/10-step-functions-execution-graph-completed.png; other values are illustrative. Remove this key before using as real state machine input.",
   "bookingID": "high-risk-test-1788030134",
   "origin": "LAX",
   "destination": "Miami",

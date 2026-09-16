@@ -153,37 +153,58 @@ flowchart TB
         SFN[["Step Functions\nState Machine"]]
     end
 
-    subgraph Agents["Shared Agent Containers - AWS Lambda"]
+    subgraph Agents["Shared Agent Functions (AWS Lambda)"]
         direction LR
         Planner["Planner Agent"]
         Weather["Weather Agent"]
         Flight["Flight-Search Agent"]
-        Hotel["Hotel Agent"]
+        Hotel["Hotel Agent\n(Option A only - Module 04)"]
     end
 
-    Queue[["SQS\nHuman-Review Queue\n(Option A only)"]]
-    Reviewer(["Human Reviewer"])
+    subgraph HITL["Human Review"]
+        Queue[["SQS\nHuman-Review Queue\n(Option A only)"]]
+        Reviewer(["Human Reviewer"])
+    end
+
     Logs[("CloudWatch Logs Insights / X-Ray")]
 
     Client --> Bus
     Client --> SFN
-    Bus <--> Agents
-    SFN --> Agents
+
+    Bus <--> Planner
+    Bus <--> Weather
+    Bus <--> Flight
+    Bus <--> Hotel
+
+    SFN --> Planner
+    SFN --> Weather
+    SFN --> Flight
+
     Bus --> Queue
     Queue --> Reviewer
     Reviewer --> Queue
     SFN <-->|"Activity + task token\n(no queue) - Option B"| Reviewer
+
     Agents -.-> Logs
     Bus -.-> Logs
     SFN -.-> Logs
 
     classDef bus fill:#0b5cab,color:#ffffff,stroke:#063b73,stroke-width:2px;
     classDef agent fill:#e8f1fb,color:#0b3d66,stroke:#0b5cab,stroke-width:1.5px;
+    classDef newagent fill:#e8f1fb,color:#0b3d66,stroke:#0b5cab,stroke-width:1.5px,stroke-dasharray: 4 3;
     classDef ext fill:#f2f2f2,color:#333333,stroke:#999999,stroke-width:1px;
     class Bus,SFN bus;
-    class Planner,Weather,Flight,Hotel agent;
+    class Planner,Weather,Flight agent;
+    class Hotel newagent;
     class Client,Queue,Reviewer,Logs ext;
 ```
+
+**Note:** every Bus <-> Agent connection above is bidirectional - each agent both subscribes to
+events and publishes new ones back onto the bus (see the full event catalog in
+[choreography.md](choreography.md#event-catalog)). The Hotel Agent connects to the bus only; it was
+never wired into the Step Functions flow, consistent with
+[Module 04](../docs/04-extending-the-system.md) extending choreography specifically, not
+orchestration.
 
 ## 7. Cross-cutting concerns
 

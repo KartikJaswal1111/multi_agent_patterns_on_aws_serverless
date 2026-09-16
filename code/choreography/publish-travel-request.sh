@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# RECONSTRUCTED from docs/images/03-travel-request-event-published.png — see ../README.md.
+# RECONSTRUCTED from docs/images/03-travel-request-event-published.png - see ../README.md.
 #
 # Publishes a TravelRequestSubmitted event onto the choreography event bus, kicking off
 # the workflow described in ../../docs/01-choreography-pattern.md.
