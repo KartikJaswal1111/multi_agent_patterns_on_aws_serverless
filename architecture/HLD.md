@@ -79,10 +79,10 @@ flowchart TB
     Reviewer(["Human Reviewer\napproves high-risk bookings"])
 
     subgraph Boundary["Multi-Agent Travel Booking System"]
-        System(["Coordinates planner, weather,\nflight-search, and hotel agents\nto assemble a travel booking"])
+        System(["Coordinates planner,\nweather, flight-search,\nand hotel agents"])
     end
 
-    Platform[("AWS Serverless Platform\nLambda · EventBridge · Step Functions\nSQS · CloudWatch / X-Ray")]
+    Platform[("AWS Serverless Platform\nLambda · EventBridge\nStep Functions · SQS\nCloudWatch · X-Ray")]
 
     Traveler -->|submits travel request| System
     System -->|requests approval for\nhigh-risk bookings| Reviewer
